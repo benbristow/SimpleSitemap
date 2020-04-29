@@ -25,6 +25,23 @@ namespace SimpleSiteMap.Tests
 
             CompareTwoSitemapDocuments(result, expectedXml);
         }
+        
+        [Fact]
+        public void GivenDataWith1Item_ConvertToSiteMap_WithAppendPageParamQueryDisabled_CreatesASitemapResult()
+        {
+            // Arrange.
+            var startDate = DateTime.SpecifyKind(new DateTime(2014, 11, 21, 18, 58, 00), DateTimeKind.Utc);
+            var data = SimpleSiteMapHelpers.CreateFakeSitemapNodes(1, startDate, pageParamQuery: false).ToPartition(10);
+            var siteMapService = new SitemapService();
+
+            // Act.
+            var result = siteMapService.ConvertToXmlSitemap(data);
+
+            // Assert.
+            var expectedXml = File.ReadAllText("Result Data\\SitemapWithNoPageQueryParam.xml");
+
+            CompareTwoSitemapDocuments(result, expectedXml);
+        }
 
         [Fact]
         public void GivenNoPartitionedData_ConvertToSitemap_CreatesASitemapResult()
@@ -60,12 +77,12 @@ namespace SimpleSiteMap.Tests
                 .Count()
                 .ShouldBe(actualXmlDocument.DescendantNodes().Count());
 
-            var actuaElements = actualXmlDocument.Root.Elements().ToList();
+            var actualElements = actualXmlDocument.Root.Elements().ToList();
             var expectedElements = expectedXmlDocument.Root.Elements().ToList();
 
-            for (int i = 0; i < actuaElements.Count; i++)
+            for (int i = 0; i < actualElements.Count; i++)
             {
-                var actualChildrenElements = actuaElements[i].Elements().ToList();
+                var actualChildrenElements = actualElements[i].Elements().ToList();
                 var expectedChildrenElements = expectedElements[i].Elements().ToList();
 
                 // loc.
