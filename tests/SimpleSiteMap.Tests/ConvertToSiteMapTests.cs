@@ -9,16 +9,18 @@ namespace SimpleSiteMap.Tests
 {
     public class ConvertToSiteMapTests
     {
+        private static readonly DateTime StartDate = DateTime.SpecifyKind(new DateTime(2014, 11, 21, 18, 58, 00), DateTimeKind.Utc);
+        
+        private static readonly SitemapService SitemapService = new SitemapService();
+        
         [Fact]
         public void GivenDataWith10Items_ConvertToSiteMap_CreatesASitemapResult()
         {
             // Arrange.
-            var startDate = DateTime.SpecifyKind(new DateTime(2014, 11, 21, 18, 58, 00), DateTimeKind.Utc);
-            var data = SimpleSiteMapHelpers.CreateFakeSitemapNodes(100, startDate).ToPartition(10);
-            var siteMapService = new SitemapService();
+            var data = SimpleSiteMapHelpers.CreateFakeSitemapNodes(100, StartDate).ToPartition(10);
 
             // Act.
-            var result = siteMapService.ConvertToXmlSitemap(data);
+            var result = SitemapService.ConvertToXmlSitemap(data);
 
             // Assert.
             var expectedXml = File.ReadAllText("Result Data\\SitemapWith10Items.xml");
@@ -29,13 +31,11 @@ namespace SimpleSiteMap.Tests
         [Fact]
         public void GivenDataWith1Item_ConvertToSiteMap_WithAppendPageParamQueryDisabled_CreatesASitemapResult()
         {
-            // Arrange.
-            var startDate = DateTime.SpecifyKind(new DateTime(2014, 11, 21, 18, 58, 00), DateTimeKind.Utc);
-            var data = SimpleSiteMapHelpers.CreateFakeSitemapNodes(1, startDate, pageParamQuery: false).ToPartition(10);
-            var siteMapService = new SitemapService();
+            // Act.
+            var data = SimpleSiteMapHelpers.CreateFakeSitemapNodes(1, StartDate, pageParamQuery: false).ToPartition(10);
 
             // Act.
-            var result = siteMapService.ConvertToXmlSitemap(data);
+            var result = SitemapService.ConvertToXmlSitemap(data);
 
             // Assert.
             var expectedXml = File.ReadAllText("Result Data\\SitemapWithNoPageQueryParam.xml");
@@ -46,13 +46,11 @@ namespace SimpleSiteMap.Tests
         [Fact]
         public void GivenNoPartitionedData_ConvertToSitemap_CreatesASitemapResult()
         {
-            // Arrange.r
-            var startDate = DateTime.SpecifyKind(new DateTime(2014, 11, 21, 18, 58, 00), DateTimeKind.Utc);
-            var partitionedData = SimpleSiteMapHelpers.CreateFakeSitemapNodes(0, startDate);
-            var siteMapService = new SitemapService();
+            // Arrange.
+            var partitionedData = SimpleSiteMapHelpers.CreateFakeSitemapNodes(0, StartDate);
 
             // Act.
-            var result = siteMapService.ConvertToXmlSitemap(partitionedData);
+            var result = SitemapService.ConvertToXmlSitemap(partitionedData);
 
             // Assert.
             var expectedXml = File.ReadAllText("Result Data\\SitemapWith0Items.xml");
