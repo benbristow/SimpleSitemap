@@ -38,7 +38,7 @@ namespace SimpleSiteMap.Tests
             var result = SitemapService.ConvertToXmlSitemap(data);
 
             // Assert.
-            var expectedXml = File.ReadAllText("Result Data\\SitemapWithNoPageQueryParam.xml");
+            var expectedXml = File.ReadAllText("Result Data//SitemapWithNoPageQueryParam.xml");
 
             CompareTwoSitemapDocuments(result, expectedXml);
         }
